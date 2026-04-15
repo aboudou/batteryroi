@@ -447,6 +447,28 @@ details.method[open] .chevron { transform: rotate(180deg); }
   white-space: pre-wrap;
 }
 
+/* ─── Footer ──────────────────────────────────────────────── */
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2.5rem;
+  font-size: 0.72rem;
+  color: var(--text-3);
+}
+
+footer a {
+  color: var(--text-3);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+footer a:hover { color: var(--text-2); }
+
+.footer-sep { opacity: 0.5; }
+
+/* ─── Method conclusion ───────────────────────────────────── */
 .method-conclusion {
   margin-top: 1.25rem;
   padding: 0.85rem 1rem;
