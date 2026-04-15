@@ -88,6 +88,13 @@
           </div>
         </div>
         <div class="field">
+          <label for="dodRef">Profondeur de décharge de référence constructeur</label>
+          <div class="input-wrap">
+            <input type="number" id="dodRef" min="1" max="100" step="1" value="90" placeholder="90">
+            <span class="unit">%</span>
+          </div>
+        </div>
+        <div class="field">
           <label for="efficiency">Rendement</label>
           <div class="input-wrap">
             <input type="number" id="efficiency" min="0" max="100" step="1" value="90" placeholder="90">
@@ -129,16 +136,29 @@
           <div class="step">
             <div class="step-num">02</div>
             <div class="step-content">
-              <div class="step-title">Pondération par la profondeur de décharge</div>
+              <div class="step-title">Correction des cycles selon la profondeur de décharge</div>
               <div class="step-desc">
-                En pratique, on ne décharge jamais la batterie à 100 % pour préserver sa longévité.
-                La profondeur de décharge (DoD) indique la fraction réellement utilisée à chaque cycle.
-                <code class="formula">× Profondeur de décharge / 100</code>
+                Les cycles garantis par le constructeur sont mesurés à une profondeur de décharge de référence
+                (typiquement 90 % pour une batterie LFP). Si la profondeur de décharge réelle diffère, le nombre de cycles effectifs change :
+                une profondeur plus faible allonge la durée de vie, une profondeur plus forte la réduit.
+                La correction suit une loi puissance (exposant 1,2, représentatif des batteries LFP).
+                <code class="formula">Cycles corrigés = Cycles constructeur × (Prof. décharge référence / Prof. décharge réelle) ^ 1,2</code>
               </div>
             </div>
           </div>
           <div class="step">
             <div class="step-num">03</div>
+            <div class="step-content">
+              <div class="step-title">Pondération par la profondeur de décharge</div>
+              <div class="step-desc">
+                En pratique, on ne décharge jamais la batterie à 100 % pour préserver sa longévité.
+                La profondeur de décharge indique la fraction réellement utilisée à chaque cycle.
+                <code class="formula">× Profondeur de décharge / 100</code>
+              </div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">04</div>
             <div class="step-content">
               <div class="step-title">Pondération par le rendement</div>
               <div class="step-desc">
@@ -149,7 +169,7 @@
             </div>
           </div>
           <div class="step">
-            <div class="step-num">04</div>
+            <div class="step-num">05</div>
             <div class="step-content">
               <div class="step-title">Dégradation linéaire de capacité</div>
               <div class="step-desc">
@@ -162,7 +182,7 @@
             </div>
           </div>
           <div class="step">
-            <div class="step-num">05</div>
+            <div class="step-num">06</div>
             <div class="step-content">
               <div class="step-title">Calcul des économies générées</div>
               <div class="step-desc">
@@ -174,7 +194,7 @@
             </div>
           </div>
           <div class="step">
-            <div class="step-num">06</div>
+            <div class="step-num">07</div>
             <div class="step-content">
               <div class="step-title">Conclusion : rentable ou non ?</div>
               <div class="step-desc">
@@ -189,6 +209,7 @@ Rentable si Résultat net &gt; 0</code>
         <div class="method-conclusion">
           Ce calcul est une estimation basée sur des hypothèses constantes (tarifs fixes, dégradation linéaire).
           Il ne tient pas compte de l'évolution des prix de l'électricité, de l'inflation, ni des coûts de maintenance éventuels.
+          La correction profondeur de décharge/cycles utilise un exposant de 1,2 représentatif des batteries LFP ; cet exposant peut varier selon les technologies (NMC, LTO…).
         </div>
       </div>
     </details>
@@ -212,9 +233,12 @@ Rentable si Résultat net &gt; 0</code>
       const cycles     = parseFloat(document.getElementById('cycles').value)      || 6000;
       const eolCap     = parseFloat(document.getElementById('eolCapacity').value) || 80;
       const dod        = parseFloat(document.getElementById('dod').value)         || 90;
+      const dodRef     = parseFloat(document.getElementById('dodRef').value)      || 90;
       const efficiency = parseFloat(document.getElementById('efficiency').value)  || 90;
 
-      const grossDischarge    = capacity * cycles;
+      // Correction cycles selon la profondeur de décharge (loi puissance, exposant 1,2 typique LFP)
+      const adjustedCycles    = cycles * Math.pow(dodRef / dod, 1.2);
+      const grossDischarge    = capacity * adjustedCycles;
       const avgCapacityFactor = (1 + eolCap / 100) / 2;
       const effectiveEnergy   = grossDischarge * (dod / 100) * (efficiency / 100) * avgCapacityFactor;
       const savingsPerKwh     = buyPrice - sellPrice;
@@ -244,6 +268,10 @@ Rentable si Résultat net &gt; 0</code>
           <div class="detail-item">
             <div class="detail-label">Économies totales</div>
             <div class="detail-value">${fmt(totalSavings)} €</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">Cycles corrigés</div>
+            <div class="detail-value">${fmt(adjustedCycles)}</div>
           </div>
           <div class="detail-item">
             <div class="detail-label">Énergie utile</div>
