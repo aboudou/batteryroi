@@ -228,7 +228,7 @@ Rentable si Résultat net &gt; 0</code>
     function calculate() {
       const cost       = parseFloat(document.getElementById('cost').value)        || 2500;
       const buyPrice   = parseFloat(document.getElementById('buyPrice').value)    || 0.21;
-      const sellPrice  = parseFloat(document.getElementById('sellPrice').value)   || 0.13;
+      const sellPrice  = parseFloat(document.getElementById('sellPrice').value)   ?? 0.13;
       const capacity   = parseFloat(document.getElementById('capacity').value)    || 5.12;
       const cycles     = parseFloat(document.getElementById('cycles').value)      || 6000;
       const eolCap     = parseFloat(document.getElementById('eolCapacity').value) || 80;
