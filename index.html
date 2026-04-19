@@ -44,21 +44,21 @@
         <div class="field">
           <label for="cost">Coût d'installation</label>
           <div class="input-wrap">
-            <input type="number" id="cost" min="0" step="100" value="2500" placeholder="2500">
+            <input type="number" id="cost" min="0" step="1" value="2500" placeholder="2500">
             <span class="unit">€</span>
           </div>
         </div>
         <div class="field">
           <label for="buyPrice">Tarif d'achat électricité</label>
           <div class="input-wrap">
-            <input type="number" id="buyPrice" min="0" step="0.01" value="0.21" placeholder="0.21">
+            <input type="number" id="buyPrice" min="0" step="0.0001" value="0.21" placeholder="0.21">
             <span class="unit">€/kWh</span>
           </div>
         </div>
         <div class="field">
           <label for="sellPrice">Tarif de revente surplus</label>
           <div class="input-wrap">
-            <input type="number" id="sellPrice" min="0" step="0.01" value="0.13" placeholder="0.13">
+            <input type="number" id="sellPrice" min="0" step="0.0001" value="0.13" placeholder="0.13">
             <span class="unit">€/kWh</span>
           </div>
         </div>
@@ -74,7 +74,7 @@
         <div class="field">
           <label for="capacity">Capacité</label>
           <div class="input-wrap">
-            <input type="number" id="capacity" min="0" step="0.1" value="5.12" placeholder="5.12">
+            <input type="number" id="capacity" min="0" step="0.01" value="5.12" placeholder="5.12">
             <span class="unit">kWh</span>
           </div>
         </div>
@@ -109,7 +109,7 @@
         <div class="field">
           <label for="efficiency">Rendement</label>
           <div class="input-wrap">
-            <input type="number" id="efficiency" min="0" max="100" step="1" value="90" placeholder="90">
+            <input type="number" id="efficiency" min="0" max="100" step="0.01" value="90" placeholder="90">
             <span class="unit">%</span>
           </div>
         </div>
